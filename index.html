@@ -88,7 +88,7 @@ document.getElementById("form").onsubmit = async (e) => {
   e.preventDefault();
 
   const status = document.getElementById("status");
-  status.innerText = "Uploading... ⏳";
+  status.innerText = "Uploading... ";
 
   const data = new FormData(e.target);
 
@@ -117,7 +117,7 @@ async function deleteFile(id) {
     method: "DELETE"
   });
 
-  document.getElementById("status").innerText = "File deleted 🗑️";
+  document.getElementById("status").innerText = "File deleted ";
   loadFiles();
 }
 
