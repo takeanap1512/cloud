@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cloud Drive</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #f5f7fa;
+      text-align: center;
+    }
+    .container {
+      width: 400px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    button {
+      padding: 10px;
+      border: none;
+      background: #4CAF50;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .file {
+      margin-top: 10px;
+      padding: 10px;
+      background: #eee;
+      border-radius: 5px;
+    }
+    img {
+      max-width: 100%;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>My Cloud Drive</h2>
+
+  <form id="uploadForm">
+    <input type="file" name="file">
+    <button>Upload</button>
+  </form>
+
+  <div id="files"></div>
+</div>
+
+<script>
+async function loadFiles() {
+  const res = await fetch("http://127.0.0.1:5000/files");
+  const files = await res.json();
+
+  const container = document.getElementById("files");
+  container.innerHTML = "";
+
+  files.forEach(f => {
+    container.innerHTML += `
+      <div class="file">
+        <p>${f.name}</p>
+        <a href="${f.url}" target="_blank">Download</a>
+        ${f.isImage ? `<img src="${f.url}" />` : ""}
+      </div>
+    `;
+  });
+}
+
+document.getElementById("uploadForm").onsubmit = async (e) => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+
+  await fetch("http://127.0.0.1:5000/upload", {
+    method: "POST",
+    body: formData
+  });
+
+  loadFiles();
+};
+
+loadFiles();
+</script>
+
+</body>
+</html>
